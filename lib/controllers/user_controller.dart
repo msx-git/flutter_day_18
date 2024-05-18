@@ -13,12 +13,13 @@ class UserController {
     User(name: "Musoxon", email: "musoxon@gmail.com", password: "12345"),
   ];
 
-  bool signUp({required User user}) {
-    return checkForExistence(user.email);
+  void signUp({required User user}) {
+    users.add(user);
   }
 
   bool authSuccess(String email, String password) {
-    return users.any((user) => user.email == email && user.password == password);
+    return users
+        .any((user) => user.email == email && user.password == password);
   }
 
   bool checkForExistence(String email) {

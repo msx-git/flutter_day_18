@@ -19,8 +19,8 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
-  HomePage({super.key});
+class HomePage2 extends StatelessWidget {
+  HomePage2({super.key});
 
   final formKey = GlobalKey<FormState>();
 

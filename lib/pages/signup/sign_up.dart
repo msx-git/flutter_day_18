@@ -38,8 +38,8 @@ class SignUp extends StatelessWidget {
                 textInputAction: TextInputAction.next,
                 decoration: const InputDecoration(hintText: 'Your name'),
                 validator: (value) {
-                  if (value!.isEmpty) {
-                    return "Enter your name";
+                  if (value!.trim().isEmpty) {
+                    return "Enter your name!";
                   }
                   return null;
                 },
@@ -52,8 +52,13 @@ class SignUp extends StatelessWidget {
                 textInputAction: TextInputAction.next,
                 decoration: const InputDecoration(hintText: 'Your email'),
                 validator: (value) {
-                  if (value!.isEmpty) {
-                    return "Enter your email";
+                  if (value!.trim().isEmpty) {
+                    return "Enter your email!";
+                  } else if (!RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$')
+                      .hasMatch(value.trim())) {
+                    return "Invalid email address!";
+                  } else if (userController.checkForExistence(value.trim())) {
+                    return "This email is already registered.\nEnter another email!";
                   }
                   return null;
                 },
@@ -67,8 +72,10 @@ class SignUp extends StatelessWidget {
                 obscureText: true,
                 decoration: const InputDecoration(hintText: '**********'),
                 validator: (value) {
-                  if (value!.isEmpty) {
-                    return "Enter your password";
+                  if (value!.trim().isEmpty) {
+                    return "Enter your password!";
+                  } else if (value.length < 8) {
+                    return "Password must be at least 8 characters!";
                   }
                   return null;
                 },
@@ -83,7 +90,9 @@ class SignUp extends StatelessWidget {
                 decoration: const InputDecoration(hintText: '**********'),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return "Re-Enter your password";
+                    return "Re-Enter your password!";
+                  } else if (value.trim() != passwordController1.text.trim()) {
+                    return "Passwords didn't match!";
                   }
                   return null;
                 },
@@ -108,11 +117,12 @@ class SignUp extends StatelessWidget {
               /// Create Account Button
               GestureDetector(
                 onTap: () {
-                  if (formKey.currentState!.validate()) {
+                  if (!formKey.currentState!.validate()) {
                     Navigator.pushReplacement(
                       context,
                       CupertinoPageRoute(
-                          builder: (context) => AuthConfirmation()),
+                        builder: (context) => const AuthConfirmation(),
+                      ),
                     );
                   }
                 },
@@ -141,7 +151,8 @@ class SignUp extends StatelessWidget {
                         text: 'Terms of Use',
                         style: TextStyle(color: Colors.deepPurple),
                       ),
-                      TextSpan(text: ' & ', style: TextStyle(color: Colors.grey)),
+                      TextSpan(
+                          text: ' & ', style: TextStyle(color: Colors.grey)),
                       TextSpan(
                         text: 'Privacy Policy',
                         style: TextStyle(color: Colors.deepPurple),
